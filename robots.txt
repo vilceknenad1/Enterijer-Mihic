@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Zameniti DOMEN produkcijskim domenom pre objavljivanja
+Sitemap: https://www.DOMEN.rs/sitemap.xml
