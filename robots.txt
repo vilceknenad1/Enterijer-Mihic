@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# Zameniti DOMEN produkcijskim domenom pre objavljivanja
-Sitemap: https://www.DOMEN.rs/sitemap.xml
+Sitemap: https://vilceknenad1.github.io/Enterijer-Mihic/sitemap.xml

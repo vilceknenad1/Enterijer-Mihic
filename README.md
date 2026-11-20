@@ -1,62 +1,39 @@
 # Enterijer Mihić — sajt
 
-Statičan, jednostrani sajt bez zavisnosti (HTML + CSS + vanilla JS). Može da se hostuje bilo gde: Netlify, Vercel, Cloudflare Pages, GitHub Pages ili običan hosting — dovoljno je postaviti sadržaj ovog foldera.
+Sajt: https://vilceknenad1.github.io/Enterijer-Mihic/
 
-```
-index.html              sadržaj i struktura stranice
-assets/css/main.css     dizajn sistem (boje, tipografija, grid, animacije)
-assets/js/config.js     ⟵ PODEŠAVANJA ZA POKRETANJE (kontakt, obrazac)
-assets/js/main.js       navigacija, galerija, lightbox, obrazac
-assets/img/             slike (WebP u više veličina) + og-image.jpg
-robots.txt, sitemap.xml SEO datoteke (zameniti DOMEN)
-tools/build.py          priprema slika i pregled u jednom fajlu
-```
+Jedna stranica, bez build koraka. Sve što je potrebno za sajt je `index.html` i folder `assets`. Posle svakog push-a na `main` GitHub Pages osveži sajt za minut-dva.
 
-## Pre objavljivanja — šta je potrebno dostaviti
+## Gde je šta
 
-Ništa od navedenog nije izmišljeno na sajtu; dok podatak ne unesete, odgovarajući red se ne prikazuje.
+| Fajl | Šta je u njemu |
+|---|---|
+| `index.html` | Sav tekst i raspored stranice |
+| `assets/js/config.js` | Telefon, Instagram, adresa za prijem upita |
+| `assets/css/main.css` | Boje, fontovi, raspored |
+| `assets/js/main.js` | Meni, galerija, uvećavanje slika, obrazac |
+| `assets/js/fx.js` | Animacije (GSAP i Lenis, učitavaju se sa cdnjs i jsDelivr) |
+| `assets/img/` | Fotografije u tri veličine (800, 1200, 1600 px) |
+| `tools/` | Skripte za pripremu slika i spisak izvora fotografija. Sajtu nisu potrebne. |
 
-| # | Šta | Gde se unosi |
-|---|-----|--------------|
-| 1 | **Adresa za prijem upita** (npr. Formspree, Basin, Getform ili sopstveni API koji prima `multipart/form-data` i vraća 2xx) | `config.js` → `formEndpoint` |
-| 2 | Da li servis prima priložene fajlove (Formspree: samo plaćeni paketi) | `config.js` → `acceptsFiles` |
-| 3 | Broj telefona: uneto (+381 65 911 4646) | `config.js` → `phone` |
-| 4 | E-mail adresa | `config.js` → `email` |
-| 5 | Instagram profil (pun URL) | `config.js` → `instagram` |
-| 6 | Politika privatnosti (stranica ili PDF) | `config.js` → `privacyPolicyUrl` |
-| 7 | Produkcijski domen | `index.html` (canonical, odkomentarisati), `og:image` kao apsolutni URL, `robots.txt`, `sitemap.xml` |
-| 8 | Prave fotografije realizovanih projekata (kada postoje) | `assets/img/` + `index.html`, sekcija `#nasi-radovi` |
+## Šta još nedostaje
 
-**Obrazac:** dok `formEndpoint` nije popunjen, obrazac proverava unos, ali posetiocu jasno kaže da slanje još nije aktivno — nikad ne prikazuje lažnu potvrdu i ne odbacuje poruke tiho. Potvrda „upit je primljen" prikazuje se samo kada server odgovori uspešno. Zaštita od spama: skriveno polje (honeypot) + minimalno vreme popunjavanja; za dodatnu zaštitu uključite spam filter u izabranom servisu.
+**Prijem upita.** Obrazac proverava unos, ali poruke još nigde ne stižu. Dok se to ne podesi, posetilac dobije poruku da slanje nije aktivno i da pozove +381 65 911 4646. Najlakše je preko besplatnog naloga na formspree.io: napravite formu, a dobijeni link (`https://formspree.io/f/...`) upišite u `config.js` kao `formEndpoint`. Formspree na besplatnom paketu ne prima priložene fotografije, pa tada postavite `acceptsFiles: false`.
 
-Polja koja obrazac šalje: `name`, `phone`, `email`, `type`, `dimensions`, `message`, `files` (0–3 fajla, do 10 MB), `_subject`.
+**E-mail i politika privatnosti.** Upisuju se u `config.js` (`email`, `privacyPolicyUrl`). Dok su prazni, ne prikazuju se.
 
-**LocalBusiness strukturirani podaci** nisu dodati namerno — dodajte ih tek kada su naziv, adresa/područje i kontakt verifikovani.
+## Fotografije
 
-## Slike
+Fotografije su sa Instagram profila @enterijer_mihic, sa blago ujednačenom bojom i isečenim ivicama. Spisak objava je u `tools/IZVOR-FOTOGRAFIJA.md`.
 
-Fotografije realizovanih radova (prefiks `r…` u `assets/img/`) preuzete su sa javnog Instagram profila @enterijer_mihic 20. 11. 2026. Spisak objava i datuma je u `tools/IZVOR-FOTOGRAFIJA.md`. Izmene su blage: ujednačen balans bele boje i kontrast, izoštravanje i isecanje nereda sa ivica kadra. Sam nameštaj nije retuširan.
+Nova fotografija u galeriji:
 
-Fotografije su na sajtu u sekcijama Nameštaj po meri, Naš pristup, Dostava i u galeriji Naši radovi. Vizualizacije su ostale u hero sekciji, u sekciji „Ne uklapajte život u nameštaj“ i kod krupnih planova materijala, i tamo su označene kao vizualizacije. Kada budu postojale profesionalne fotografije, mogu da zamene i njih.
+1. Napravite tri verzije u WebP formatu, široke 800, 1200 i 1600 px, i nazovite ih npr. `rnovakuhinja-800.webp`, `rnovakuhinja-1200.webp` i `rnovakuhinja-1600.webp`. Stavite ih u `assets/img/`.
+2. U `index.html`, u sekciji `#nasi-radovi`, kopirajte jedan blok `<figure class="g-item">`.
+3. Promenite naziv slike, `alt` tekst, `data-title` i `data-cat` (`kuhinje`, `plakari`, `dnevne`, `spavace` ili `ostalo`).
 
-Nisu korišćeni: sto-pregrada (Instagram na tim slikama prikazuje oznaku „Sadržaj generisan uz pomoć AI“), objava sa TV programom na ekranu, ugao kupatila sa tuđim proizvodom na ormariću i nekoliko slabije osvetljenih snimaka.
+Galerija je mreža od 4 kolone, pa izgleda najurednije kada je broj fotografija deljiv sa 4. Brojači u filterima se ažuriraju sami.
 
-Nova fotografija se dodaje u galeriju tako što se kopira jedan `<figure class="g-item">`, pa se podese `data-cat` (`kuhinje`, `plakari`, `dnevne`, `spavace`, `ostalo`), `data-title`, `alt` i putanje. Filteri i brojači se ažuriraju sami.
+## Animacije
 
-## Pristupačnost i performanse
-
-- Jedan H1, logična hijerarhija naslova, opisni `alt` tekstovi na srpskom.
-- Vidljiv fokus, „Preskoči na sadržaj", navigacija tastaturom (meni, galerija, lightbox: ← → Esc, zarobljen fokus).
-- `prefers-reduced-motion` gasi animacije; sav sadržaj je vidljiv i bez njih.
-- Responzivne WebP slike sa `srcset`, `width/height` (bez pomeranja rasporeda), lazy loading ispod prvog ekrana, hero se predučitava.
-- Fontovi: Cormorant Garamond + Manrope (Google Fonts, sa latin-ext za š, č, ć, ž, đ).
-
-## Animacije (motion sloj)
-
-`assets/js/fx.js` koristi GSAP 3.12.5 + ScrollTrigger (cdnjs) i Lenis 1.1.13 (jsDelivr) za glatko skrolovanje:
-uvodna animacija sa kotom 0 → 2400 mm, otkrivanje naslova slovo po slovo i reč po reč, slike koje se otvaraju i blago pomeraju pri skrolu,
-prikovana „signature" sekcija i proces izrade, marquee traka koja se pomera samo dok skrolujete, magnetna dugmad, kursor sa oznakom (samo miš), zrno filma.
-
-- Ako posetilac ima uključeno „smanji pokrete" ili se biblioteke ne učitaju, sloj se isključuje i sajt radi sa jednostavnim prikazom — sav sadržaj ostaje vidljiv.
-- Uvodna animacija traje oko 3 s i preskače se kada se stranica otvori dalje od vrha.
-- Za potpuno samostalan hosting biblioteke možete preuzeti u `assets/vendor/` i promeniti tri `<script src>` putanje na dnu `index.html`.
+Ako posetilac u sistemu ima uključeno smanjenje pokreta, ili se biblioteke za animacije ne učitaju, sajt se prikazuje bez animacija i sav sadržaj ostaje vidljiv. Uvodna animacija se prikazuje samo pri prvoj poseti u toku jedne sesije.

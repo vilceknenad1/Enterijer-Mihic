@@ -193,6 +193,33 @@
     const tel = "tel:" + CFG.phone.replace(/[^+\d]/g, "");
     document.querySelectorAll("[data-phone]").forEach((el) => { el.hidden = false; el.href = tel; const t = el.querySelector("[data-phone-text]"); if (t) t.textContent = CFG.phone; });
   }
+  /* mobile: services carousel counter */
+  const svcGrid = $(".svc-grid"), prog = $(".svc-progress");
+  if (svcGrid && prog) {
+    const cards = $$(".svc", svcGrid), num = $(".svc-progress__num", prog), bar = $(".svc-progress__bar i", prog);
+    const upd = () => {
+      if (svcGrid.scrollWidth <= svcGrid.clientWidth + 2) return;
+      const max = svcGrid.scrollWidth - svcGrid.clientWidth;
+      const p = Math.min(1, Math.max(0, svcGrid.scrollLeft / max));
+      const i = Math.round(p * (cards.length - 1));
+      num.textContent = String(i + 1).padStart(2, "0");
+      bar.style.transform = `scaleX(${(i + 1) / cards.length})`;
+    };
+    svcGrid.addEventListener("scroll", () => requestAnimationFrame(upd), { passive: true });
+    upd();
+  }
+
+  /* mobile: quick-contact bar, shown between the hero and the contact section */
+  const mbar = $("#mbar");
+  if (mbar && "IntersectionObserver" in window) {
+    mbar.hidden = false;
+    let pastHero = false, nearEnd = false;
+    const sync = () => mbar.classList.toggle("is-on", pastHero && !nearEnd && !document.documentElement.style.overflow);
+    new IntersectionObserver(([e]) => { pastHero = !e.isIntersecting && e.boundingClientRect.top < 0; sync(); }).observe($(".hero"));
+    const endIO = new IntersectionObserver((es) => { nearEnd = es.some((x) => x.isIntersecting); sync(); }, { rootMargin: "0px 0px -10% 0px" });
+    [$("#kontakt"), $(".footer")].forEach((el) => el && endIO.observe(el));
+    new MutationObserver(sync).observe(document.documentElement, { attributes: true, attributeFilter: ["style"] });
+  }
   $("#year").textContent = new Date().getFullYear();
   $(".to-top")?.addEventListener("click", () => { window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" }); $(".wordmark")?.focus({ preventScroll: true }); });
 

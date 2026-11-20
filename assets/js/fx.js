@@ -81,8 +81,10 @@
   }
 
   /* ------------------------------------------------------------ grain + cursor */
-  const grain = document.createElement("div"); grain.className = "grain"; grain.setAttribute("aria-hidden", "true");
-  document.body.append(grain);
+  if (fine) {
+    const grain = document.createElement("div"); grain.className = "grain"; grain.setAttribute("aria-hidden", "true");
+    document.body.append(grain);
+  }
 
   if (fine) {
     d.classList.add("fx-cursor");
@@ -157,12 +159,15 @@
   const loader = $(".loader");
   if (d.classList.contains("fx-load") && loader && window.scrollY < 50) {
     lenis?.stop();
+    try { sessionStorage.setItem("em-intro", "1"); } catch (e) {}
+    const quick = !fine; // phones: same sequence, about half the time
+    gsap.globalTimeline.timeScale(1);
     const num = $(".loader__num", loader), mark = $(".loader__mark", loader);
     const mw = splitWords(mark);
     const count = { v: 0 };
     gsap.timeline({
       onComplete: () => { d.classList.remove("fx-load"); lenis?.start(); }
-    })
+    }).timeScale(quick ? 1.8 : 1)
       .from(mw, { yPercent: 115, duration: 1.1, stagger: 0.08 }, 0.1)
       .to(".loader__line", { scaleX: 1, duration: 1.5, ease: "power3.inOut" }, 0.2)
       .to(count, { v: 2400, duration: 1.5, ease: "power3.inOut", onUpdate: () => (num.textContent = String(Math.round(count.v)).padStart(4, "0")) }, 0.2)
@@ -210,17 +215,12 @@
     if (!below(f)) return;
     gsap.fromTo(f, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.6, ease: "expo.inOut", scrollTrigger: { trigger: f, start: "top 88%" } });
   });
-  $$("main .section .frame img, .delivery__media img").forEach((img) => {
+  $$(".delivery__media img").forEach((img) => {
     const box = img.closest(".frame, .delivery__media");
     const amt = img.closest(".g-item") ? 5 : 8;
     gsap.fromTo(img, { yPercent: -amt, scale: 1.18 }, { yPercent: amt, scale: 1.18, ease: "none", scrollTrigger: { trigger: box, start: "top bottom", end: "bottom top", scrub: true } });
   });
 
-  /* materials: figures drift at different speeds */
-  [[".m1", -40], [".m2", 60], [".m3", 30], [".m4", -70]].forEach(([s, y]) => {
-    const el = $(s); if (!el) return;
-    gsap.fromTo(el, { y: -y / 2 }, { y: y / 2, ease: "none", scrollTrigger: { trigger: ".materials", start: "top bottom", end: "bottom top", scrub: true } });
-  });
 
   /* ------------------------------------------------------------ marquee: moves only while you scroll */
   const rows = $$(".marquee__track");
